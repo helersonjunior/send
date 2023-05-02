@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JR</title>
+    <link rel="shortcut icon" href="./assets/image/favicon.jpg" type="image/x-icon">
+    <link rel="stylesheet" href="./assets/css/style.css">
+</head>
+
+<body>
+    <div class="container">
+        <div class="header">
+            <span>JR</span>
+            <!-- <div class="pre-carregamento">
+                <div class="efeito-carregamento">
+                    Carregando...
+                </div>
+            </div> -->
+            
+            <span class="MensagemFlesh"></span>
+            
+            <button onclick="openModal()" id="new">Adicionar</i></button>
+        </div>
+
+        <div class="divTable">
+            <div class="menu">
+                
+            </div>
+
+            <div class="tableConteudo">
+              
+            </div>
+
+            <div class="tableConteudo2">
+               
+            </div>
+
+        </div>
+    </div>
+
+    <div class="modal-container">
+        <div class="modal">
+            <div id="mudar">Link</div>
+            <form>
+                <div class="form1">
+                    <label class="label1" for="m-nome">Nome</label>
+                    <input id="m-nome" type="text" required autocomplete="off" />
+
+                    <label class="label2" for="m-funcao">Mensagem</label>
+                    <input id="m-conteudo" type="text" required autocomplete="off" />
+
+                    <button id="btnSalvar">Enviar</button>
+                </div>
+                <div class="form2">
+                    <input type="file" id="arquivo" required>
+                    <button id="btnEnviar">Enviar</button>
+                </div>
+
+            </form>
+        </div>
+    </div>
+
+    </div>
+
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-storage.js"></script> 
+
+    <script src="./assets/js/script2.js"></script>
+    <script src="./assets/js/script.js"></script>
+
+</body>
+
+</html>
