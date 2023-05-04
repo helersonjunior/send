@@ -37,7 +37,7 @@
 .modal-container-2 #title{
     align-self: center;
 }
-.modal-container-2 form{
+.modal-container-2 .form{
     margin-top: 25px;
     margin-bottom: 10px;
 }
