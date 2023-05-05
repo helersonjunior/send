@@ -37,9 +37,27 @@
 .modal-container-2 #title{
     align-self: center;
 }
+.modal-container-2 #erro{
+    display: none;
+    font-size: 14px;
+    color: red;
+}
 .modal-container-2 .form{
-    margin-top: 35px;
+    margin-top: 30px;
     margin-bottom: 10px;
+}
+.modal-container-2 #divSenha{
+    position: relative;
+}
+.modal-container-2 #senha{
+    padding-right: 60px;
+}
+.modal-container-2 #senhaVisible{
+    position: absolute;
+    right: 5px;
+    color: grey;
+    font-size: 12px;
+    margin-left: 70px;
 }
 .modal-container-2 p{
     margin-bottom: 5px;
@@ -61,6 +79,14 @@
     text-decoration: underline;
 }
 
+.enviando{
+    animation: alternate-reverse efeitox 2s infinite;
+}
+
+@keyframes efeitox{
+      0%{background-color: rgb(112, 112, 245);} 
+      100%{background-color: rgb(32, 32, 161);} 
+}
 
 /* Modal Geral */
 .modal {
@@ -86,7 +112,7 @@
     border-left: none;
     border-right: none;
 }
-.modal button {
+ .modal button {
     height: 35px;
     margin: 10px auto;
     outline: none;
@@ -96,7 +122,7 @@
     border: none;
     background-color: rgb(57, 57, 226);
     color: white;
-}
+} 
 .modal .form{
     width: 100%;
 }
@@ -126,7 +152,6 @@ input::-webkit-file-upload-button {
         opacity: 0;
         transform: translate3d(0, -60px, 0);
     }
-
     to {
         opacity: 1;
         transform: translate3d(0, 0, 0);
@@ -134,23 +159,15 @@ input::-webkit-file-upload-button {
 }
 
 
+/* Media query */
 @media (max-width: 700px) {
     .modal {
         width: 90% !important;
     }
-    
-   /*  .modal label {
-        font-size: 12px !important;
-    } */
 }
 
 
 
-.enviando{
-    animation:  alternate-reverse efeito 1.5s infinite;
-}
-  
-@keyframes efeito{
-     0%{background-color: rgb(57, 57, 226);} 
-     100%{background-color: rgb(87, 87, 230);} 
-}
+
+
+

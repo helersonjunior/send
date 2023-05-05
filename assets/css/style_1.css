@@ -97,6 +97,9 @@ button {
   padding: 5px 5px;
   text-align: center;
 }
+.menu #emailUsuario{
+  font-size: 14px;
+}
 .menu #permission{
   font-size: 15px;
   color: rgb(94, 92, 92);
@@ -127,7 +130,8 @@ button {
    padding: 0 10px;
    width: 100%;
 }
-.card .data-atual{
+.card .data-atual,
+.card .data-atual-storage{
   width: 170px;
   color: rgb(83, 83, 83);
   margin-top: 8px;

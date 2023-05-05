@@ -1,6 +1,7 @@
 let title = document.getElementById('title')
 let erro = document.getElementById('erro')
 let email = document.getElementById('email')
+let divSenha = document.getElementById('divSenha')
 let senha = document.getElementById('senha')
 let btnRecSenha = document.getElementById('recuperar')
 let btnLogin = document.getElementById('login')
@@ -9,6 +10,7 @@ let infoSenha = document.getElementById('infoSenha')
 let info = document.getElementById('info')
 
 
+/// muda os elementos do modal para cadastro
 function cadastrar(){
     title.innerHTML='Register'
     erro.style.display='none'
@@ -18,6 +20,7 @@ function cadastrar(){
     info.innerHTML='Tem uma conta ? <span onclick="login()">Login</span>'
 }
 
+/// muda os elementos do modal para login
 function login(){
     title.innerHTML='Login'
     erro.style.display='none'
@@ -27,27 +30,29 @@ function login(){
     info.innerHTML='não tem uma conta? <span onclick="cadastrar()">Cadastrar</span> '
 }
 
+/// muda os elementos do modal para resetar senha
 function recuperar(){
     title.innerHTML='Redefinir Senha'
     erro.style.display='none'
-    senha.style.display='none'
-    senha.previousElementSibling.style.display='none'
+    //senha.style.display='none'
+    /* senha.previousElementSibling.style.display='none' */
+    divSenha.style.display='none'
     btnLogin.style.display='none'
     btnRecSenha.style.display='block'
     infoSenha.style.display='none'
     info.style.display='none'
 }
 
-// resetar Modal
+/// resetar Modal para estado inicial
 function resetModal(){
     console.log('Reset Modal')
     title.style.display='block'
     title.innerHTML = 'Login'
     erro.style.display='none'
     email.value=''
-    senha.style.display = 'block'
+    divSenha.style.display='block'
     senha.value=''
-    senha.previousElementSibling.style.display = 'block'
+    //senha.previousElementSibling.style.display = 'block' 
     btnRecSenha.style.display = 'none'
     btnLogin.style.display = 'block'
     btnRegister.style.display = 'none'
@@ -56,10 +61,25 @@ function resetModal(){
     info.innerHTML = 'não tem uma conta? <span onclick="cadastrar()">Cadastrar</span> '
 }
 
-/////////////////// Eventos //////////////////////////
+/// mostra e oculta a senha
+function visao(){
+    let visao = document.getElementById('senhaVisible')
+    if(visao.innerHTML == 'Mostrar'){
+        visao.innerHTML='Ocultar'
+        senha.type='text'
+    }else{
+        visao.innerHTML='Mostrar'
+        senha.type='password'
+    }
+}
+
+////////////////////////////////////////////////
+/////////////////// Eventos ////////////////////
+////////////////////////////////////////////////
 
 const modal_2 = document.querySelector('.modal-container-2')
 
+///// abri e fecha o modal
 function modalLogin() {
   modal_2.classList.add('active')
 
@@ -72,31 +92,43 @@ function modalLogin() {
   }
 }
 
+/// envia os dados para a função de fazer login do firebase
 document.getElementById('login').onclick = e =>{
     e.preventDefault()
-    let email = document.getElementById('email').value
-    let senha = document.getElementById('senha').value
-    //console.log("logar", {email, senha})
+    let email = document.getElementById('email').value.trim()
+    let senha = document.getElementById('senha').value.trim()
+
+    if(email=='' || senha ==''){
+        title.style.display='none'
+        erro.style.display='block'
+        erro.innerHTML='Preencha todos os campos' 
+        return
+    }
+    
+    // adiciona a class enviando 
     btnLogin.classList.add('enviando')
-    loginFirebase(email, senha) 
+
+    // chama a função
+    loginFirebase(email, senha)  
 } 
 
+/// envia os dados para a função de fazer registro do firebase
 document.getElementById('register').onclick = e => {
     e.preventDefault()
     let email = document.getElementById('email').value
     let senha = document.getElementById('senha').value
-    //console.log("register", {email, senha})
+    
+    // chama a função
     registerFirebase(email, senha)
 }
 
+/// envia o email para a função de reset de senha no firebase
 document.getElementById('recuperar').onclick = e => {
     e.preventDefault()
     let email = document.getElementById('email').value
-    console.log("email para redefinir senha", {email})
+    
+    // chama a função
     resetEmail(email) 
 } 
 
-/* document.querySelector('.form').addEventListener('submit', (e)=>{
-    e.preventDefault()
-})
- */
+

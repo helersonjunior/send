@@ -9,7 +9,7 @@ const firebaseConfig = {
 };
 
 ///// Initialize Firebase
-firebase.initializeApp(firebaseConfig);
+firebase.initializeApp(firebaseConfig)
 let db = firebase.firestore()
 const TURMA = "turmaA"
 
@@ -24,7 +24,6 @@ const TURMA = "turmaA"
   document.getElementById('permission').innerHTML = erro.message
   console.log("GET - Firestore :", erro.message)
 }) */
-
 
 
 /* Atualização em tempo real */
@@ -49,7 +48,7 @@ db.collection("turmaA").onSnapshot((snapshot) => {
     adcionarCardsTela(docId, dados)
 
   })
-},(error) =>{
+}, (error) => {
   document.getElementById('permission').innerHTML = error.message
   console.log("onSnapshot - Firestore :", error.message)
 }
@@ -88,10 +87,10 @@ function adcionarCardsTela(docId, dados) {
 
   }
 }
-//
 
 
-/*  Adcionar card no Firebase Firestore  */
+
+/////  Adcionar card no Firebase Firestore  
 function adicionar(nome, conteudo) {
   let label1 = document.querySelector(".label1")
 
@@ -108,9 +107,9 @@ function adicionar(nome, conteudo) {
       console.log("Documento inserido", doc)
       document.querySelector("#m-nome").value = ""
       document.querySelector("#m-conteudo").value = ""
-    }).catch(err => {
+    }).catch(error => {
       avisoErro()
-      console.log(err)
+      console.log("Erro ao inserir o documento", error)
     })
 
   } else {
@@ -124,9 +123,9 @@ function adicionar(nome, conteudo) {
       console.log("Documento inserido", doc)
       document.querySelector("#m-nome").value = ""
       document.querySelector("#m-conteudo").value = ""
-    }).catch(err => {
+    }).catch(error => {
       avisoErro()
-      console.log(err)
+      console.log("Erro ao inserir o documento", error)
     })
   }
 }
@@ -134,88 +133,101 @@ function adicionar(nome, conteudo) {
 
 /*  Apagar do Firebase */
 function apagar(e) {
-  let confirmar = confirm("Deletar ?")
+  let confirmar = confirm("Excluir ?")
   if (confirmar) {
-    console.log("apagar")
-    let id = e.id
-    db.collection(TURMA).doc(id).delete()
+    db.collection(TURMA).doc(e.id).delete()
       .then(() => {
         avisoExcluido()
-        console.log("documento apagado com sucesso")
-      }).catch(err => {
-        console.log(err)
+        console.log("Documento apagado com sucesso")
+      }).catch(error => {
+        console.log("Erro ao apagar o documento", error)
       })
   }
 }
 
-/* Evento para adcionar no FIRESTORE*/
-const btnSalvar = document.querySelector('#btnSalvar')
-btnSalvar.onclick = e => {
-  const nome = document.querySelector("#m-nome").value
-  const conteudo = document.querySelector("#m-conteudo").value
 
-  if (nome == '' || conteudo == '') {
-    return
-  }
-
-  e.preventDefault()
-
-  modal.classList.remove('active')
-
-  adicionar(nome, conteudo)
-}
 
 
 ///////////////////////////////////////
 //////////////// STORAGE //////////////
 ///////////////////////////////////////
 
-/*  Buscar arquivos do firebase Storage e adciona na tela  */
+/// Buscar arquivos do firebase Storage e adciona na tela  
 const area2 = document.querySelector(".tableConteudo2")
 const storage = firebase.storage()
 const ref = storage.ref("/arquivos")
 
 function arquivos() {
-  /* 
-     ref.getDownloadURL() .then((url) => { 
-      // Aqui você pode usar o URL do arquivo
-       console.log('URL do arquivo:', url);
-      }) .catch((error) => { if (error.code === 'storage/unauthorized') { 
-      // O usuário não tem permissão para acessar o arquivo 
-      console.log('Usuário não tem permissão para acessar o arquivo.'); } else { 
-      // Outro erro ocorreu
-       console.error('Erro ao acessar o arquivo:', error); } });
-   */
   ref.listAll().then(res => {
     console.log("Arquivos", res.items.length)
     res.items.map(item => {
 
       item.getDownloadURL().then(url => {
-        /* adcionarCardsTela2(url, item) */
-        let element = `<div id="${item.name}" class="card">
-                         <div>
-                         <h5 class="card-title">Arquivo</h5>
-                         <div class="arq"><a href="${url}">${item.name}</a></div>
-                         <p class="data-atual">00:00 - 00/00/0000</p>
-                         </div>
-                         <button id="${item.name}" onclick="deletar('${item.name}')"><img src="./assets/img/lixeira.png"></button>
-                      </div>`
 
-        area2.innerHTML += element
+        item.getMetadata().then(function (metadata) {
+
+                   ///////////////////////////////////////////
+                   var dataHora = metadata.timeCreated
+                   var dataObj = new Date(dataHora);
+                   
+                   // Converter para o fuso horário do Brasil (Brasília)
+                   var fusoHorarioBrasil = "America/Sao_Paulo";
+                   dataObj.toLocaleString('pt-BR', { timeZone: fusoHorarioBrasil });
+                   
+                   ///////////////////
+                   var dia = dataObj.getUTCDate();
+                   var mes = dataObj.getUTCMonth() + 1; // O mês começa do zero, por isso adicionamos 1
+                   var ano = dataObj.getUTCFullYear();
+                   let d_ = dia < 10 ? "0" + dia : dia
+                   let m_ =  mes < 10 ? "0" + mes : mes
+                   var dataFormatada = d_ + '/' + m_ + '/' + ano;
+                   
+                   console.log("data", dataFormatada); 
+                   
+                   //////////
+                   var horas = dataObj.getHours();
+                   var minutos = dataObj.getMinutes();
+                   var horaFormatada = horas.toString().padStart(2, '0') + ':' + minutos.toString().padStart(2, '0');
+                   
+                   console.log("hora", horaFormatada);
+                   
+                   let res = horaFormatada + " - "  + dataFormatada
+
+
+
+
+        
+          /// adcionarCardsTela2(url, item) 
+          let element = `<div id="${item.name}" class="card">
+        <div>
+        <h5 class="card-title">Arquivo</h5>
+        <div class="arq"><a href="${url}">${item.name}</a></div>
+        <p class="data-atual">${res}</p>
+        </div>
+        <button id="${item.name}" onclick="deletar('${item.name}')"><img src="./assets/img/lixeira.png"></button>
+     </div>`
+
+          area2.innerHTML += element
+        }).catch(function (error) {
+          console.log(error);
+        });
+
 
       })
+
+
     })
   }).catch(error => {
     if (error.code === 'storage/unauthorized') {
-      // O usuário não tem permissão para acessar o arquivo
+      /// O usuário não tem permissão para acessar o arquivo
       console.log('Storage : Missing or insufficient permissions.');
     } else {
-      // Outro erro ocorreu 
-       console.error('Erro ao acessar o arquivo:', error)
+      /// Outro erro ocorreu 
+      console.error('Erro ao acessar o arquivo:', error)
     }
   })
-}
 
+}
 
 function adcionarCardsTela2(url, item) {
 
@@ -252,7 +264,7 @@ function deletar(item) {
   }
 }
 
-/* Evento para enviar para STORAGE */
+///// Evento de click - STORAGE 
 const btnEnviar = document.querySelector('#btnEnviar')
 btnEnviar.onclick = e => {
   e.preventDefault()
@@ -261,7 +273,7 @@ btnEnviar.onclick = e => {
   const file = arquivo.files[0]
   console.log("file", file)
 
-  modal.classList.remove('active')
+  modal_1.classList.remove('active')
 
   if (file != undefined) {
 
@@ -303,26 +315,31 @@ btnEnviar.onclick = e => {
 
 arquivos()
 
+
 ///////////////////////////////////////
 //////////////// AUTH /////////////////
 ///////////////////////////////////////
 
 let auth = firebase.auth()
 
-/*  cria um usuario  */
+/////  cria um usuario  
 function registerFirebase(email, senha) {
-  console.log("x", { email, senha })
 
   auth.createUserWithEmailAndPassword(email, senha)
     .then(user => {
-      console.log("Usuario", user)
-      document.querySelector('.modal-container-2').style.display='none'
+      console.log("Usuario criado", user)
+
+      /// modal
+      modal_2.classList.remove('active')
+
     }).catch(error => {
+      const errorMessage = getTranslatedErrorMessage(error);
       console.log("Erro ao criar usuario", error)
-      document.getElementById('title').style.display = 'none'
-      let erro = document.getElementById('erro')
+
+      /// modal
+      title.style.display = 'none'
       erro.style.display = 'block'
-      erro.innerHTML = error.message
+      erro.innerHTML = errorMessage
     })
 }
 
@@ -337,11 +354,14 @@ function loginFirebase(email, senha) {
         location.reload()
 
       }).catch(error => {
-        console.log(error.message)
-        document.getElementById('title').style.display = 'none'
-        let erro = document.getElementById('erro')
+        const errorMessage = getTranslatedErrorMessage(error);
+        console.log('Error traduzido:', errorMessage);
+        console.log(error)
+
+        /// modal
+        title.style.display = 'none'
         erro.style.display = 'block'
-        erro.innerHTML = error.message
+        erro.innerHTML = errorMessage
         btnLogin.classList.remove('enviando')
       })
 
@@ -351,7 +371,7 @@ function loginFirebase(email, senha) {
 
 }
 
-/*  deslogar */
+/////  deslogar 
 function logout() {
   auth.signOut().then(() => {
     console.log('Usuario foi deslogado')
@@ -362,32 +382,34 @@ function logout() {
     })
 }
 
-/*  reset email */
+///// reset email 
 function resetEmail(email) {
   auth.sendPasswordResetEmail(email)
     .then(() => {
       console.log('email de reset enviado')
       document.getElementById('title').style.display = 'block'
-      document.getElementById('title').innerHTML= 'Email enviado'
-      document.getElementById('recuperar').style.display='none'
-      document.getElementById('erro').style.display='none'
-    }).catch(error=>{
+      document.getElementById('title').innerHTML = 'Email enviado'
+      document.getElementById('recuperar').style.display = 'none'
+      document.getElementById('erro').style.display = 'none'
+    }).catch(error => {
+      const errorMessage = getTranslatedErrorMessage(error);
       console.log(error)
-      document.getElementById('title').style.display = 'none'
-      let erro = document.getElementById('erro')
+
+      /// modal
+      title.style.display = 'none'
       erro.style.display = 'block'
-      erro.innerHTML = error.message
+      erro.innerHTML = errorMessage
     })
 }
 
-/* observa se há usuario e mudançãs na autenticação (login e logout) */
+///// observa se há usuario e mudançãs na autenticação (login e logout) 
 auth.onAuthStateChanged(user => {
   if (user) {
     document.getElementById('MD').style.display = 'none'
     document.getElementById('emailUsuario').innerHTML = user.email
     document.getElementById('sair').style.display = 'inline-block'
 
-    if(user.uid == 'ZCRPAzOFngd90O0yiAk72Cmqiz02'){
+    if (user.uid == 'ZCRPAzOFngd90O0yiAk72Cmqiz02') {
       document.querySelector('.pre-carregamento').style.display = 'flex'
     }
   } else {

@@ -70,13 +70,32 @@ function avisoExcluido() {
   
 }
 
-const modal = document.querySelector('.modal-container-1')
-function openModal(index = 0) {
-  modal.classList.add('active')
+const modal_1 = document.querySelector('.modal-container-1')
 
-  modal.onclick = e => {
+function openModal(index = 0) {
+  modal_1.classList.add('active')
+
+  modal_1.onclick = e => {
     if (e.target.className.indexOf('modal-container-1') !== -1) {
-      modal.classList.remove('active')
+      modal_1.classList.remove('active')
     }
   }
+}
+
+
+///// Evento para adicionar no FIRESTORE
+const btnSalvar = document.querySelector('#btnSalvar')
+btnSalvar.onclick = e => {
+  const nome = document.querySelector("#m-nome").value
+  const conteudo = document.querySelector("#m-conteudo").value
+
+  if (nome == '' || conteudo == '') {
+    return
+  }
+
+  e.preventDefault()
+
+  modal_1.classList.remove('active')
+
+  adicionar(nome, conteudo)
 }
