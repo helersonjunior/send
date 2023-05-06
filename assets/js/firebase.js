@@ -32,29 +32,31 @@ db.collection("turmaA").onSnapshot((snapshot) => {
   let carregamento = document.querySelector(".pre-carregamento")
   carregamento.style.display = "none"
 
+  console.log("Firestore", snapshot.docs.length)
   if (snapshot.docs.length == 0) {
     document.querySelector(".tableConteudo").innerHTML = "Não há mensagens"
-
     console.log("nao a mensagens")
   }
 
   snapshot.forEach((doc) => {
-    /* console.log("snap", doc) */
+    // console.log("snap", doc) 
     let docId = doc.id
     let dados = doc.data()
 
-    /* console.log("item", dados) */
-
+    /// chama a função para adicionar cards na tela
     adcionarCardsTela(docId, dados)
 
   })
 }, (error) => {
-  document.getElementById('permission').innerHTML = error.message
-  console.log("onSnapshot - Firestore :", error.message)
-}
+  if(error.code == 'permission-denied'){
+    document.getElementById('permission').innerHTML = 'Acesso proibido'
+    console.log("onSnapshot - Firestore : Acesso proibido")
+  }else{
+    document.getElementById('permission').innerHTML = error.message
+    console.log("onSnapshot - Firestore :", error.message)
+  }
+  }
 )
-
-
 
 function adcionarCardsTela(docId, dados) {
   let area = document.querySelector(".tableConteudo")
@@ -87,8 +89,6 @@ function adcionarCardsTela(docId, dados) {
 
   }
 }
-
-
 
 /////  Adcionar card no Firebase Firestore  
 function adicionar(nome, conteudo) {
@@ -155,104 +155,97 @@ function apagar(e) {
 /// Buscar arquivos do firebase Storage e adciona na tela  
 const area2 = document.querySelector(".tableConteudo2")
 const storage = firebase.storage()
-const ref = storage.ref("/arquivos")
+const pastaRef = storage.ref("/arquivos")
 
-function arquivos() {
-  ref.listAll().then(res => {
-    console.log("Arquivos", res.items.length)
-    res.items.map(item => {
-
-      item.getDownloadURL().then(url => {
-
-        item.getMetadata().then(function (metadata) {
-
-                   ///////////////////////////////////////////
-                   var dataHora = metadata.timeCreated
-                   var dataObj = new Date(dataHora);
-                   
-                   // Converter para o fuso horário do Brasil (Brasília)
-                   var fusoHorarioBrasil = "America/Sao_Paulo";
-                   dataObj.toLocaleString('pt-BR', { timeZone: fusoHorarioBrasil });
-                   
-                   ///////////////////
-                   var dia = dataObj.getUTCDate();
-                   var mes = dataObj.getUTCMonth() + 1; // O mês começa do zero, por isso adicionamos 1
-                   var ano = dataObj.getUTCFullYear();
-                   let d_ = dia < 10 ? "0" + dia : dia
-                   let m_ =  mes < 10 ? "0" + mes : mes
-                   var dataFormatada = d_ + '/' + m_ + '/' + ano;
-                   
-                   console.log("data", dataFormatada); 
-                   
-                   //////////
-                   var horas = dataObj.getHours();
-                   var minutos = dataObj.getMinutes();
-                   var horaFormatada = horas.toString().padStart(2, '0') + ':' + minutos.toString().padStart(2, '0');
-                   
-                   console.log("hora", horaFormatada);
-                   
-                   let res = horaFormatada + " - "  + dataFormatada
-
-
-
-
-        
-          /// adcionarCardsTela2(url, item) 
-          let element = `<div id="${item.name}" class="card">
-        <div>
-        <h5 class="card-title">Arquivo</h5>
-        <div class="arq"><a href="${url}">${item.name}</a></div>
-        <p class="data-atual">${res}</p>
-        </div>
-        <button id="${item.name}" onclick="deletar('${item.name}')"><img src="./assets/img/lixeira.png"></button>
-     </div>`
-
-          area2.innerHTML += element
-        }).catch(function (error) {
-          console.log(error);
+function arquivos(){
+  pastaRef.listAll().then(result => {
+    console.log("Storage", result.items.length) 
+      result.items.forEach( itemRef => {
+        // Obtenha o link de download de cada arquivo
+        itemRef.getDownloadURL().then(downloadURL => {
+          // Obtenha os metadados de cada arquivo
+          itemRef.getMetadata().then(metadata => {
+            //console.log(metadata);
+            // Aqui você pode manipular os metadados e o link de download como desejar
+            // Por exemplo, exibir os metadados e o link de download em elementos HTML na página
+  
+            ///////////////////////////////////
+            var dataHora = metadata.timeCreated
+            var dataObj = new Date(dataHora);
+            
+            // Converter para o fuso horário do Brasil (Brasília)
+            var fusoHorarioBrasil = "America/Sao_Paulo";
+            dataObj.toLocaleString('pt-BR', { timeZone: fusoHorarioBrasil });
+            
+            /////////////////// Dia/mês/Ano
+            var dia = dataObj.getUTCDate();
+            var mes = dataObj.getUTCMonth() + 1; // O mês começa do zero, por isso adicionamos 1
+            var ano = dataObj.getUTCFullYear();
+            /// Adiciona um 0 se for menor que 10
+            let d_ = dia < 10 ? "0" + dia : dia
+            let m_ =  mes < 10 ? "0" + mes : mes
+            /// Data formatada
+            var dataFormatada = d_ + '/' + m_ + '/' + ano; 
+            //console.log("data", dataFormatada); 
+     
+            /////////////////// Hora 00:00
+            var horas = dataObj.getHours();
+            var minutos = dataObj.getMinutes();
+            /// Hora formatada
+            var horaFormatada = horas.toString().padStart(2, '0') + ':' + minutos.toString().padStart(2, '0');
+            ///console.log("hora", horaFormatada);
+            
+            let data = horaFormatada + " - "  + dataFormatada
+           
+            // chama a função para adcionar card na tela
+            adcionarCardsTela2(itemRef, downloadURL , data) 
+  
+            // catch do getMetadata
+          }).catch( error => {
+            console.log('getMetadata',error);
+          });
+  
+          // catch do getDownloadUrl
+        }).catch( error => {
+          console.log('getDownloadUrl',error);
         });
+      }); 
+  
+      // catch do listAll
+    }).catch( error => {
+      if (error.code === 'storage/unauthorized') {
+          /// O usuário não tem permissão para acessar o arquivo
+          console.log('Storage : Acesso proibido');
+      } else {
+          /// Outro erro ocorreu 
+          console.error('Erro ao acessar o arquivo:', error)
+      }
+  
+    });
+  }
 
+function adcionarCardsTela2(itemRef, downloadURL, data) {
 
-      })
-
-
-    })
-  }).catch(error => {
-    if (error.code === 'storage/unauthorized') {
-      /// O usuário não tem permissão para acessar o arquivo
-      console.log('Storage : Missing or insufficient permissions.');
-    } else {
-      /// Outro erro ocorreu 
-      console.error('Erro ao acessar o arquivo:', error)
-    }
-  })
-
-}
-
-function adcionarCardsTela2(url, item) {
-
-  let element = `<div id="${item.name}" class="card mb-4">
-    <div class="card-header">
+  let element =
+   `<div id="${itemRef.name}" class="card">
+      <div>
         <h5 class="card-title">Arquivo</h5>
-        <p class="data-atual"></p>
-    </div>
-    <div class="card-body flexButton">
-        <div class="card-text"><h5><small><span>Msg: </span></small></h5><a href="${url}}" target="blank">${item.name}</a></div>
-        <p class="data-atual">00:00 - 00/00/0000</p>
-        <button class="btn btn-outline-danger btn-sm" onclick="deletar('${item.name}')">Excluir</button>
-    </div>
+        <div class="arq"><a href="${downloadURL}">${itemRef.name}</a></div>
+        <p class="data-atual">${data}</p>
+      </div>
+      <button id="${itemRef.name}" onclick="deletar('${itemRef.name}')"><img src="./assets/img/lixeira.png"></button>
   </div>`
 
-  area2.innerHTML += element
-
-}
+    area2.innerHTML += element
+  
+}  
 
 /* deleta arquivo da Storage */
 function deletar(item) {
   let confirmar = confirm("Deletar ?")
   if (confirmar) {
     let cardElement = document.getElementById(item)
-    ref.child(item).delete().then(() => {
+    pastaRef.child(item).delete().then(() => {
 
       console.log("deletou com sucesso", cardElement)
       avisoExcluido()
@@ -277,7 +270,7 @@ btnEnviar.onclick = e => {
 
   if (file != undefined) {
 
-    let arquivoUp = ref.child(file.name).put(file)
+    let arquivoUp = pastaRef.child(file.name).put(file)
 
     arquivoUp.on('state_changed', upload => {
 
@@ -340,6 +333,7 @@ function registerFirebase(email, senha) {
       title.style.display = 'none'
       erro.style.display = 'block'
       erro.innerHTML = errorMessage
+      btnRegister.classList.remove('enviando')
     })
 }
 
@@ -391,6 +385,11 @@ function resetEmail(email) {
       document.getElementById('title').innerHTML = 'Email enviado'
       document.getElementById('recuperar').style.display = 'none'
       document.getElementById('erro').style.display = 'none'
+      btnRecSenha.classList.remove('enviando')
+
+      setTimeout(()=>{
+        resetModal()
+      }, 3000)
     }).catch(error => {
       const errorMessage = getTranslatedErrorMessage(error);
       console.log(error)
@@ -399,6 +398,7 @@ function resetEmail(email) {
       title.style.display = 'none'
       erro.style.display = 'block'
       erro.innerHTML = errorMessage
+      btnRecSenha.classList.remove('enviando')
     })
 }
 

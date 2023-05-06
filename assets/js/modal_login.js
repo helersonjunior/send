@@ -115,8 +115,18 @@ document.getElementById('login').onclick = e =>{
 /// envia os dados para a função de fazer registro do firebase
 document.getElementById('register').onclick = e => {
     e.preventDefault()
-    let email = document.getElementById('email').value
-    let senha = document.getElementById('senha').value
+    let email = document.getElementById('email').value.trim()
+    let senha = document.getElementById('senha').value.trim()
+
+    if(email=='' || senha ==''){
+        title.style.display='none'
+        erro.style.display='block'
+        erro.innerHTML='Preencha todos os campos' 
+        return
+    }
+    
+    // adiciona a class enviando 
+    btnRegister.classList.add('enviando')
     
     // chama a função
     registerFirebase(email, senha)
@@ -125,10 +135,20 @@ document.getElementById('register').onclick = e => {
 /// envia o email para a função de reset de senha no firebase
 document.getElementById('recuperar').onclick = e => {
     e.preventDefault()
-    let email = document.getElementById('email').value
+    let email = document.getElementById('email').value.trim()
+
+    if(email==''){
+        title.style.display='none'
+        erro.style.display='block'
+        erro.innerHTML='Digite o email' 
+        return
+    }
+    
+    // adiciona a class enviando 
+    btnRecSenha.classList.add('enviando')
     
     // chama a função
-    resetEmail(email) 
+     resetEmail(email) 
 } 
 
 
