@@ -11,7 +11,7 @@ const firebaseConfig = {
 ///// Initialize Firebase
 firebase.initializeApp(firebaseConfig)
 let db = firebase.firestore()
-const TURMA = "turmaA"
+
 
 ///////////////////////////////////////
 /////////////// FIRESTORE /////////////
@@ -27,7 +27,7 @@ const TURMA = "turmaA"
 
 
 /* Atualização em tempo real */
-db.collection("turmaA").onSnapshot((snapshot) => {
+db.collection("turmaA").orderBy('data', 'desc').onSnapshot((snapshot) => {
   document.querySelector(".tableConteudo").innerHTML = ""
   let carregamento = document.querySelector(".pre-carregamento")
   carregamento.style.display = "none"
@@ -39,7 +39,7 @@ db.collection("turmaA").onSnapshot((snapshot) => {
   }
 
   snapshot.forEach((doc) => {
-    // console.log("snap", doc) 
+     console.log("snap", doc.data()) 
     let docId = doc.id
     let dados = doc.data()
 
@@ -90,7 +90,7 @@ function adcionarCardsTela(docId, dados) {
   }
 }
 
-/////  Adcionar card no Firebase Firestore  
+/////  Adcionar documento no Firebase Firestore  
 function adicionar(nome, conteudo) {
   let label1 = document.querySelector(".label1")
 
@@ -98,11 +98,8 @@ function adicionar(nome, conteudo) {
 
   if (label1.innerText == "Nome do link") {
 
-    db.collection(TURMA).add({
-      nomeLink: nome,
-      endereco: conteudo,
-      tempo: horaData
-    }).then((doc) => {
+    db.collection('turmaA').add({nomeLink: nome, endereco: conteudo, tempo: horaData, data: new Date()})
+    .then(doc => {
       avisoSucesso()
       console.log("Documento inserido", doc)
       document.querySelector("#m-nome").value = ""
@@ -114,11 +111,8 @@ function adicionar(nome, conteudo) {
 
   } else {
 
-    db.collection(TURMA).add({
-      nome: nome,
-      msg: conteudo,
-      tempo: horaData
-    }).then((doc) => {
+    db.collection('turmaA').add({nome: nome, msg: conteudo, tempo: horaData, data: new Date()})
+    .then(doc => {
       avisoSucesso()
       console.log("Documento inserido", doc)
       document.querySelector("#m-nome").value = ""
@@ -131,11 +125,11 @@ function adicionar(nome, conteudo) {
 }
 
 
-/*  Apagar do Firebase */
+/////  Apagar do Firebase 
 function apagar(e) {
   let confirmar = confirm("Excluir ?")
   if (confirmar) {
-    db.collection(TURMA).doc(e.id).delete()
+    db.collection('turmaA').doc(e.id).delete()
       .then(() => {
         avisoExcluido()
         console.log("Documento apagado com sucesso")
@@ -159,6 +153,7 @@ const pastaRef = storage.ref("/arquivos")
 
 function arquivos(){
   pastaRef.listAll().then(result => {
+ 
     console.log("Storage", result.items.length) 
       result.items.forEach( itemRef => {
         // Obtenha o link de download de cada arquivo
@@ -279,13 +274,14 @@ btnEnviar.onclick = e => {
       if (upload.state == "running") {
 
         var progresso = Math.round((upload.bytesTransferred / upload.totalBytes) * 100)
-        let porcentagem = document.querySelector('.MensagemFlesh')
-        porcentagem.classList.remove("sucesso")
-        porcentagem.classList.remove("erro")
-        porcentagem.classList.remove("apagado")
-        porcentagem.style.display = "flex"
-        porcentagem.style.color = "blue"
-        porcentagem.innerHTML = `${progresso}%`
+        
+        /// Mensagem Flesh
+        MensagemFlesh.classList.remove("sucesso")
+        MensagemFlesh.classList.remove("erro")
+        MensagemFlesh.classList.remove("apagado")
+        MensagemFlesh.style.display = "flex"
+        MensagemFlesh.style.color = "blue"
+        MensagemFlesh.innerHTML = `${progresso}%`
         console.log(`${progresso}%`)
 
       }
@@ -295,9 +291,9 @@ btnEnviar.onclick = e => {
       console.log("error", error)
     }, () => {
       console.log("completou")
-      let porcentagem = document.querySelector('.MensagemFlesh')
-      porcentagem.style.display = "none"
-      porcentagem.style.color = "white"
+      
+      //MensagemFlesh.style.display = "none"
+      MensagemFlesh.style.color = "white"
       avisoSucesso()
       arquivo.value = ""
       document.querySelector(".tableConteudo2").innerHTML = ""
@@ -381,15 +377,16 @@ function resetEmail(email) {
   auth.sendPasswordResetEmail(email)
     .then(() => {
       console.log('email de reset enviado')
-      document.getElementById('title').style.display = 'block'
-      document.getElementById('title').innerHTML = 'Email enviado'
-      document.getElementById('recuperar').style.display = 'none'
-      document.getElementById('erro').style.display = 'none'
+      title.style.display = 'block'
+      title.innerHTML = 'Email enviado'
+      btnRecSenha.style.display = 'none'
+      erro.style.display = 'none'
       btnRecSenha.classList.remove('enviando')
 
       setTimeout(()=>{
         resetModal()
       }, 3000)
+
     }).catch(error => {
       const errorMessage = getTranslatedErrorMessage(error);
       console.log(error)
@@ -416,7 +413,4 @@ auth.onAuthStateChanged(user => {
     console.log('Ninguem logado')
   }
 })
-
-
-
 
