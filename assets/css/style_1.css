@@ -8,18 +8,40 @@ body {
   width: 100vw;
   height: 100vh;
   display: flex;
+  flex-direction: column;
   align-items: center;
-  justify-content: center;
+  
   background-color: rgba(0, 0, 0, 0.1)
+}
+.tema{
+  align-self: flex-end;
+  padding: 5px;
+  color: rgba(0, 0, 0, 0.007)
 }
 button {
   cursor: pointer;
 }
-.container {
+.container1 {
   width: 90%;
   height: 80%;
   border-radius: 10px;
+}
+.dia{
   background-color: white;
+}
+.noite{
+  color: antiquewhite;
+  background-color: #282c34;
+}
+.container2 {
+  margin-top: 10px ;
+  width: 90%;
+  display: flex;
+  justify-content: space-between;
+  border-radius: 10px;
+  
+  padding: 5px 10px;
+  font-size: 12px;
 }
 .header {
   min-height: 70px;

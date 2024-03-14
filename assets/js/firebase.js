@@ -414,3 +414,27 @@ auth.onAuthStateChanged(user => {
   }
 })
 
+
+///////////////////////////////////////
+//////////////// Reload /////////////////
+///////////////////////////////////////
+
+// Referência ao documento específico que você deseja ler (substitua 'suaColecao' pelo nome da sua coleção e 'seuDocumento' pelo ID do documento)
+const documentRef = db.collection('turmaA').doc('contador');
+
+// Ler o documento
+documentRef.get()
+  .then((docSnapshot) => {
+    if (docSnapshot.exists) {
+      // O documento existe
+      console.log("Dados do documento:", docSnapshot.data());
+      let reloads = docSnapshot.data()
+      document.querySelector('.reload').innerText = reloads.contador
+    } else {
+      // O documento não existe
+      console.log("O documento não foi encontrado.");
+    }
+  })
+  .catch((error) => {
+    console.error("Erro ao ler documento:", error);
+  });
