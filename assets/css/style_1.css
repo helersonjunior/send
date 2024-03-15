@@ -30,7 +30,7 @@ button {
   background-color: white;
 }
 .noite{
-  color: antiquewhite;
+  color: white;
   background-color: #282c34;
 }
 .container2 {
@@ -121,8 +121,10 @@ button {
 }
 .menu #emailUsuario{
   font-size: 14px;
+  color: black;
 }
 .menu #permission{
+  
   font-size: 15px;
   color: rgb(94, 92, 92);
 }
@@ -158,11 +160,18 @@ button {
   color: rgb(83, 83, 83);
   margin-top: 8px;
   width: 100%;
-}
-.card .li a{
+} 
+/* .card .li a{
   color: rgb(80, 75, 75)
 }
 .card .arq a{
+  color: rgb(80, 75, 75);
+} */
+
+.ancora-noite{
+  color: rgb(128, 226, 128);
+}
+.ancora-dia{
   color: rgb(80, 75, 75);
 }
 .card button {
