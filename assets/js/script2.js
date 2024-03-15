@@ -27,6 +27,30 @@ link.onclick = () => {
   }
 }
 
+function hora() {
+  var data = new Date()
+  var ano = data.getFullYear()
+  var mes = data.getMonth() + 1
+  var dia = data.getDate()
+
+  var hora = data.getHours()
+  var minutos = data.getMinutes()
+  var segundos = data.getSeconds()
+
+  let horaV = hora < 10 ? "0" + hora : hora
+  let minutosV = minutos < 10 ? "0" + minutos : minutos
+  //let segundosV = segundos < 10 ? "0" + segundos : segundos 
+
+  let mesV = mes < 10 ? "0" + mes : mes
+  let diaV = dia < 10 ? "0" + dia : dia
+
+
+  let d = diaV + "/" + mesV + "/" + ano
+  let h = horaV + ":" + minutosV
+
+  console.log("data", h + " - " + d)
+  return h + " - " + d
+}
 
 function avisoSucesso() {
 
@@ -68,34 +92,4 @@ function avisoExcluido() {
     MensagemFlesh.style.display = "none"
   }, 900)
   
-}
-
-const modal_1 = document.querySelector('.modal-container-1')
-
-function openModal(index = 0) {
-  modal_1.classList.add('active')
-
-  modal_1.onclick = e => {
-    if (e.target.className.indexOf('modal-container-1') !== -1) {
-      modal_1.classList.remove('active')
-    }
-  }
-}
-
-
-///// Evento para adicionar no FIRESTORE
-const btnSalvar = document.querySelector('#btnSalvar')
-btnSalvar.onclick = e => {
-  const nome = document.querySelector("#m-nome").value
-  const conteudo = document.querySelector("#m-conteudo").value
-
-  if (nome == '' || conteudo == '') {
-    return
-  }
-
-  e.preventDefault()
-
-  modal_1.classList.remove('active')
-
-  adicionar(nome, conteudo)
 }

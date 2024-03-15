@@ -7,88 +7,66 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>JR</title>
     <link rel="shortcut icon" href="./assets/img/favicon.jpg" type="image/x-icon">
-    <link rel="stylesheet" href="./assets/css/modal.css">
-    <link rel="stylesheet" href="./assets/css/style_1.css">
+    <link rel="stylesheet" href="./assets/css/style-2.css">
+    <link rel="stylesheet" href="./assets/css/login.css">
     <style>
-
     </style>
 </head>
 
 <body>
-    <div class="tema">
-        <div class="temas">xx</div>
-    </div>
-
-    <!-------- Container 1 ---------->
-    <div class="padrao container1">
+    <div class="container">
         <div class="header">
-            <span id="MD" onclick="modalLogin()">JR</span>
-            <button id="sair" onclick="logout()" >Sair</button>
+            <span onclick="modalLogin()">JR</span>
             <div class="pre-carregamento">
                 <div class="efeito-carregamento">
                     Carregando...
                 </div>
             </div>
-
+            
             <span class="MensagemFlesh"></span>
-
-            <button onclick="openModal()" id="new">+</i></button>
+            
+            <button onclick="openModal()" id="new">Adicionar</i></button>
         </div>
 
         <div class="divTable">
             <div class="menu">
-                <span id="emailUsuario"></span>
-                <p id="permission"></p>
+               
             </div>
+
             <div class="tableConteudo">
-                 <!--  <div key="123" class="card">
-                    <div>
+                <!--  <div key="123" class="card">
                     <h5 class="card-title">Junior R</h5>
-                    <div class="li"><a class="a" href="#">Mensagem</a></div>
+                    <div class="li"><a href="#">Mensagem</a></div>
                     <p class="data-atual">22:29 - 26/10/2022</p>
-                  </div>
                     <button id="123" class="btn btn-outline-danger btn-sm" onclick="apagar(this)"><img
                             src="./assets/img/lixeira.png"></button>
                 </div>
                 <div id="${docId}" class="card">
-                    <div>
                     <h5 class="card-title">Helerson de spuza ferreira junior</h5>
                     <p class="msg">Lorem ipsum dolor sit amet consectetur adipisicing elit. Natus architecto fuga quidem, ratione distinctio illum!</p>
                     <p class="data-atual">22:29 - 25/10/2022</p>
-                </div>
                     <button id="${docId}" class="btn btn-outline-danger btn-sm" onclick="apagar(this)"><img
                             src="./assets/img/lixeira.png"></button>
-                </div> -->   
+                </div>   -->
             </div>
 
             <div class="tableConteudo2">
-<!-- 
-                   <div id="${item.name}" class="card">
-                    <div>
+                <!-- <div id="${item.name}" class="card">
                     <h5 class="card-title">Arquivo</h5>
-                    <div class="arq"><a class="a" href="${url}">item.namehohy7r7ds4r87r78tr7t98t98t98ghiubkjbkjbkjviifuyfd65d5sersrghpjps6sdf8g9jjijoijeoiroiegejret87t87t78t8t98hoin</a></div>
+                    <div class="arq"><a href="${url}">item.namehohy7r7ds4r87r78tr7t98t98t98ghiubkjbkjbkjviifuyfd65d5sersrghpjps6sdf8g9jjijoijeoiroiegejret87t87t78t8t98hoin</a></div>
                     <p class="data-atual">00:00 - 00/00/0000</p>
-                </div>
                     <button id="${item.name}" onclick="deletar('${item.name}')"><img src="./assets/img/lixeira.png"></button>
-                 </div>    -->
-
+                 </div>  -->
             </div>
 
         </div>
     </div>
 
-    <!-------- Container 2 ---------->
-    <div class="padrao container2">
-        <div>Reload</div>
-        <div class="reload">0</div>
-    </div>
-
-    <!-------- Modal de Enviar Docs ---------->
-    <div class="modal-container-1">
+    <div class="modal-container">
         <div class="modal">
             <div id="mudar">Link</div>
             <form>
-                 <div class="form1">
+                <div class="form1">
                     <label class="label1" for="m-nome">Nome</label>
                     <input id="m-nome" type="text" required autocomplete="off" />
 
@@ -100,32 +78,27 @@
                 <div class="form2">
                     <input type="file" id="arquivo" required>
                     <button id="btnEnviar">Enviar</button>
-                </div> 
+                </div>
 
             </form>
         </div>
     </div>
 
-    <!-------- Modal de login ---------->
     <div class="modal-container-2">
-        <div class="modal">
+        <div class="modal-2">
             <div id="title">Login</div>
-            <div id="erro"></div>
-            <div class="form">
+            <form>
+                <div class="form1">
+                    <label class="label1" for="m-nome">Email</label>
+                    <input id="email" type="text" autocomplete="off" />
 
-                <label>Email</label>
-                <input id="email" type="text" autocomplete="off" required/>
+                    <label class="label2" for="m-funcao">Senha</label>
+                    <input id="senha" type="text" autocomplete="off" />
 
-                
-                <div id="divSenha">
-                    <label>Senha</label>
-                    <input id="senha" type="password" autocomplete="off" required/><span id="senhaVisible" onclick="visao()">Mostrar</span></div>
-
-                <button  id="login">Entrar</button>
-                <button id="register">Cadastrar</button>
-                <button  id="recuperar">Enviar email de recuperação</button>
+                    <button id="login">Entrar</button>
+                    <button id="register">Cadastrar</button>
                 </div>
-            <p id="infoSenha" onclick="recuperar()"> Esqueci minha senha</p>
+            </form>
             <p id="info">não tem uma conta? <span onclick="cadastrar()">Cadastrar</span> </p>
         </div>
     </div>
@@ -135,14 +108,11 @@
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-storage.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script> 
 
-    <script src="assets/js/tema.js"></script>
-     <script src="./assets/js/tradução_error.js"></script>
-    <script src="./assets/js/data_hora.js"></script>
-    <script src="./assets/js/modal_login.js"></script>
-    <script src="./assets/js/modal_send.js"></script>
-    <script src="./assets/js/firebase.js"></script>  
+    <script src="./assets/js/login.js"></script>
+    <script src="./assets/js/script2.js"></script>
+    <script src="./assets/js/script.js"></script>
 
 </body>
 
