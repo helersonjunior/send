@@ -98,6 +98,10 @@
     border-radius: 10px;
     width: 50%;
 }
+
+.modalNoite{
+    background-color: rgba(0, 0, 0, 0.877);
+}
 .modal label {
     font-size: 14px;
     width: 100%;

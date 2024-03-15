@@ -66,7 +66,7 @@ function adcionarCardsTela(docId, dados) {
     let element = `<div key="${docId}" class="card">
                      <div>
                      <h5 class="card-title">${dados.nomeLink}</h5>
-                     <div class="li"><a href="${dados.endereco}">Link</a></div>
+                     <div class="li"><a class="a ancora-noite" href="${dados.endereco}">Link</a></div>
                      <p class="data-atual">${dados.tempo}</p>
                      </div>
                      <button id="${docId}" onclick="apagar(this)"><img src="./assets/img/lixeira.png"></button>
@@ -225,13 +225,15 @@ function adcionarCardsTela2(itemRef, downloadURL, data) {
    `<div id="${itemRef.name}" class="card">
       <div>
         <h5 class="card-title">Arquivo</h5>
-        <div class="arq"><a href="${downloadURL}">${itemRef.name}</a></div>
+        <div class="arq"><a class="a ancora-noite" href="${downloadURL}">${itemRef.name}</a></div>
         <p class="data-atual">${data}</p>
       </div>
       <button id="${itemRef.name}" onclick="deletar('${itemRef.name}')"><img src="./assets/img/lixeira.png"></button>
   </div>`
 
     area2.innerHTML += element
+
+    
   
 }  
 
