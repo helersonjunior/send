@@ -34,7 +34,7 @@ db.collection("turmaA").orderBy('data', 'desc').onSnapshot((snapshot) => {
 
   console.log("Firestore", snapshot.docs.length)
   if (snapshot.docs.length == 0) {
-    document.querySelector(".tableConteudo").innerHTML = "Não há mensagens"
+    document.querySelector(".tableConteudo").innerHTML = "<div class='nao'>Não há mensagens</div>"
     console.log("nao a mensagens")
   }
 
@@ -154,6 +154,10 @@ const pastaRef = storage.ref("/arquivos")
 function arquivos(){
   pastaRef.listAll().then(result => {
  
+    if(result.items.length == 0 ){
+      document.querySelector(".tableConteudo2").innerHTML = "<div class='nao'>Não há arquivos</div>"
+    }
+
     console.log("Storage", result.items.length) 
       result.items.forEach( itemRef => {
         // Obtenha o link de download de cada arquivo
